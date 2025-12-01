@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invert Viewer</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: black;
+      overflow: hidden;
+    }
+    video {
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      filter: invert(1);
+    }
+    #note {
+      position: fixed;
+      top: 10px;
+      width: 100%;
+      text-align: center;
+      color: white;
+      font-family: sans-serif;
+      font-size: 16px;
+      opacity: 0.6;
+    }
+  </style>
+</head>
+<body>
+  <div id="note">Camera is inverted for artwork viewing</div>
+  <video id="vid" autoplay playsinline></video>
+  <script>
+    const video = document.getElementById('vid');
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+      .then(stream => {
+        video.srcObject = stream;
+      })
+      .catch(err => alert("Camera access required to view artwork."));
+  </script>
+</body>
+</html>
