@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live Camera Color Inverter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    html, body { margin: 0; padding: 0; overflow: hidden; background: black; font-family: 'Inter', sans-serif; color: white; }
+    #video-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; object-fit: cover; display: none; }
+    #camera-feed { position: absolute; min-width: 100%; min-height: 100%; top: 50%; left: 50%; transform: translate(-50%, -50%); filter: invert(100%); }
+    #start-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; justify-content: center; align-items: center; flex-direction: column; z-index: 9999; color: white; text-align: center; padding: 20px; box-sizing: border-box; }
+    #start-button { padding: 15px 30px; font-size: 20px; background: #4A90E2; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); transition: background 0.3s, transform 0.1s; }
+    #start-button:active { transform: scale(0.98); background: #3a7dc9; }
+    h1 { font-weight: 700; margin-bottom: 5px; }
+  </style>
+</head>
+<body>
+  <div id="start-screen">
+    <h1>Inverted View Mode</h1>
+    <p>Tap "Start" to activate your camera and see the world in inverted colors. This is perfect for viewing color-inverted artwork.</p>
+    <button id="start-button">Start Experience</button>
+  </div>
+  <div id="video-container">
+    <video id="camera-feed" playsinline webkit-playsinline autoplay></video>
+  </div>
+  <script>
+    const startButton = document.getElementById('start-button');
+    const startScreen = document.getElementById('start-screen');
+    const videoContainer = document.getElementById('video-container');
+    const videoElement = document.getElementById('camera-feed');
+    const startCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+        videoElement.srcObject = stream;
+        videoElement.onloadedmetadata = () => {
+          videoElement.play();
+          videoContainer.style.display = 'block';
+          startScreen.style.display = 'none';
+        };
+      } catch (err) {
+        alert("Camera Access Required. Please enable permissions and try again.");
+      }
+    };
+    startButton.addEventListener('click', startCamera);
+  </script>
+</body>
+</html>
